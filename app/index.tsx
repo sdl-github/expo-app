@@ -3,8 +3,6 @@ import { Button, Text, View, TouchableOpacity } from 'react-native'
 import { router } from 'expo-router'
 import { Colors } from 'react-native-ui-lib'
 
-// import './global.css'
-
 export default function App() {
   return (
     <View style={{ flex: 1 }}>
@@ -22,7 +20,6 @@ export default function App() {
           <View style={{ marginTop: 10 }}>
             <Button
               title='新增服务器'
-              // onPress={() => router.push('/setting/server/edit')}
               onPress={() => router.push('/setting/server')}
             >
             </Button>
