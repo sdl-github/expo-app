@@ -9,7 +9,7 @@ export const Message = {
             autoHide: true,
             position: 'bottom',
             props: {
-                icon: '✨'
+                icon: '🎉'
             }
         });
     },
@@ -21,7 +21,7 @@ export const Message = {
             autoHide: true,
             position: 'bottom',
             props: {
-                icon: '✨'
+                icon: '💬'
             }
         });
     },
@@ -33,7 +33,7 @@ export const Message = {
             autoHide: true,
             position: 'bottom',
             props: {
-                icon: '✨'
+                icon: '⚠️'
             }
         });
     }

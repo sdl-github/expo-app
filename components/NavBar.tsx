@@ -1,10 +1,11 @@
-import {Text, View, StatusBar as Bar, StyleSheet} from "react-native";
-import {StatusBar} from "expo-status-bar";
-import {StyleProp} from "react-native/Libraries/StyleSheet/StyleSheet";
-import {TextStyle} from "react-native/Libraries/StyleSheet/StyleSheetTypes";
-import {TouchableOpacity} from "react-native-ui-lib";
-import {router} from "expo-router";
-import {AntDesign} from '@expo/vector-icons';
+import { Text, View, StatusBar as Bar, StyleSheet } from "react-native";
+import { StatusBar } from "expo-status-bar";
+import { StyleProp } from "react-native/Libraries/StyleSheet/StyleSheet";
+import { TextStyle } from "react-native/Libraries/StyleSheet/StyleSheetTypes";
+import { TouchableOpacity } from "react-native-ui-lib";
+import { router } from "expo-router";
+import { AntDesign } from '@expo/vector-icons';
+import { ReactElement } from "react";
 
 const barHeight = Bar.currentHeight
 
@@ -15,26 +16,28 @@ interface IProps {
     style?: StyleProp<TextStyle>
     hiddenBack?: boolean
     hiddenTitle?: boolean
+    customLeft?: ReactElement
+    customRight?: ReactElement
 }
 
 export default function NavBar(props: IProps) {
     const {
         statusBarColor, title, titleStyle, style,
-        hiddenBack, hiddenTitle
+        hiddenBack, hiddenTitle, customLeft, customRight
     } = props
     return (
-        <View style={{...styles.nav, paddingTop: barHeight, ...style}}>
-            <StatusBar backgroundColor={statusBarColor}/>
+        <View style={{ ...styles.nav, paddingTop: barHeight }}>
+            <StatusBar backgroundColor={statusBarColor} />
             <View style={styles.fun}>
-                {!hiddenBack && <TouchableOpacity onPress={() => router.back()}>
-                    <AntDesign name="arrowleft" style={styles.icon}/>
-                </TouchableOpacity>}
+                {!!customLeft ? customLeft : (!hiddenBack && <TouchableOpacity onPress={() => router.back()}>
+                    <AntDesign  size={20} name="arrowleft" style={styles.icon} />
+                </TouchableOpacity>)}
             </View>
             <View>
-                {!hiddenTitle && <Text style={{...styles.title, ...titleStyle}}>{title}</Text>}
+                {!hiddenTitle && <Text style={{ ...styles.title }}>{title}</Text>}
             </View>
             <View style={styles.fun}>
-                <Text></Text>
+                {customRight && customRight}
             </View>
         </View>
     )
@@ -43,7 +46,7 @@ export default function NavBar(props: IProps) {
 
 const styles = StyleSheet.create({
     nav: {
-        paddingHorizontal: 20,
+        paddingHorizontal: 5,
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
@@ -60,5 +63,9 @@ const styles = StyleSheet.create({
     },
     fun: {
         width: 50,
+        display: 'flex',
+        flexDirection: 'row',
+        alignContent: 'center',
+        justifyContent: 'center'
     }
 });

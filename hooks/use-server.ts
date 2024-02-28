@@ -3,6 +3,7 @@ import { proxy, useSnapshot } from 'valtio'
 import { getData, setData } from "../lib/storage";
 import { SERVER_KEY, SERVER_LIST_KEY } from "../constants";
 import Toast from 'react-native-toast-message';
+import { Message } from "@/lib/message";
 
 interface Server {
     url: string;
@@ -40,7 +41,6 @@ export function useServer() {
     async function addServer(server: Server) {
         const storeServerList: Server[] = await getData(SERVER_LIST_KEY) || []
         if (storeServerList.some(item => item.url === server.url && item.username === server.username)) {
-            Toast.show({text1:"服务器已存在"});
             throw new Error()
         }
         storeServerList.push(server)

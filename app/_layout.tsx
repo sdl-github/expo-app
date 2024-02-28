@@ -1,25 +1,26 @@
-import {Slot} from 'expo-router';
-import Toast, {BaseToast, ErrorToast} from 'react-native-toast-message';
-import {View, Text, StyleSheet} from "react-native";
-import {Colors} from "react-native-ui-lib";
+import { Slot } from 'expo-router';
+import Toast, { BaseToast, ErrorToast, ToastConfigParams } from 'react-native-toast-message';
+import { View, Text, Colors } from "react-native-ui-lib";
+import { StyleSheet } from "react-native";
 
 const toastConfig = {
-    message: ({text1, props}) => (
+    message: ({ text1, props }: ToastConfigParams<any>) => (
         <View style={styles.container}>
             <View>
                 <Text>{props.icon}</Text>
             </View>
-            <View style={{marginLeft: 5}}>
-                <Text style={{color: 'white'}}>{text1}</Text>
+            <View style={{ marginLeft: 5 }}>
+                <Text style={{ color: 'white' }}>{text1}</Text>
             </View>
         </View>
     )
 };
+
 export default function Layout() {
     return (
         <>
-            <Slot/>
-            <Toast config={toastConfig}/>
+            <Slot />
+            <Toast config={toastConfig} />
         </>
     )
 }
