@@ -40,13 +40,7 @@ export function useServer() {
     async function addServer(server: Server) {
         const storeServerList: Server[] = await getData(SERVER_LIST_KEY) || []
         if (storeServerList.some(item => item.url === server.url && item.username === server.username)) {
-            Toast.show({
-                type: 'error',
-                text1: '服务器已存在',
-                text2: '请检查服务器配置',
-                visibilityTime: 3000,
-                autoHide: true,
-            });
+            Toast.show({text1:"服务器已存在"});
             throw new Error()
         }
         storeServerList.push(server)
