@@ -18,3 +18,12 @@ export async function getData(key:string) {
         console.log('get data err');
     }
 }
+
+
+export async function removeData(key:string) {
+    try {
+        await AsyncStorage.removeItem(key);
+    } catch(e) {
+        console.log('remove data err');
+    }
+}

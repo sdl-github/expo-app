@@ -2,13 +2,12 @@ import { useEffect, useState } from "react";
 import { proxy, useSnapshot } from 'valtio'
 import { getData, setData } from "../lib/storage";
 import { SERVER_KEY, SERVER_LIST_KEY } from "../constants";
-import Toast from 'react-native-toast-message';
-import { Message } from "@/lib/message";
 
 interface Server {
     url: string;
     username?: string
     password?: string
+    token?: string
 }
 
 interface IState {
@@ -45,12 +44,12 @@ export function useServer() {
         }
         storeServerList.push(server)
         await setData(SERVER_LIST_KEY, storeServerList)
-        restoreServer()
+        await restoreServer()
     }
 
     async function setServer(server: Server) {
         store.server = server
-        setData(SERVER_KEY, server)
+        await setData(SERVER_KEY, server)
     }
 
     async function delServer(server:Server) {

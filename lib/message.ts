@@ -36,5 +36,17 @@ export const Message = {
                 icon: '⚠️'
             }
         });
+    },
+    loading: (str: string) => {
+        Toast.show({
+            type: 'message',
+            text1: str,
+            autoHide: false,
+            position: 'bottom',
+            props: {
+                icon: '⏳'
+            }
+        });
+        return Toast.hide
     }
 }
