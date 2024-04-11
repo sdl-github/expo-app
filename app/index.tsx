@@ -1,21 +1,21 @@
-import {Button, Text, View, TouchableOpacity, ScrollView, StyleSheet} from 'react-native'
-import {router, useGlobalSearchParams} from 'expo-router'
+import { Button, Text, View, TouchableOpacity, ScrollView, StyleSheet } from 'react-native'
+import { router, useGlobalSearchParams } from 'expo-router'
 import NavBar from "@/components/NavBar";
-import {Ionicons} from '@expo/vector-icons';
-import {useEffect, useState} from "react";
-import {objStore, Type} from "@/store/obj";
-import {useServer} from "@/hooks/use-server";
+import { Ionicons } from '@expo/vector-icons';
+import { useEffect, useState } from "react";
+import { objStore, Type } from "@/store/obj";
+import { useServer } from "@/hooks/use-server";
 import useSWR from "swr";
 import request from "@/lib/request";
-import {FsListResp} from "@/lib/types/resp";
-import {useSnapshot} from 'valtio'
-import {Colors, Image, ListItem} from "react-native-ui-lib";
-import {fileIcon, folderIcon} from "@/assets/icons/base64-icon";
-import {Breadcrumb} from "@/components/Breadcrumb";
+import { FsListResp } from "@/lib/types/resp";
+import { useSnapshot } from 'valtio'
+import { Colors, Image, ListItem } from "react-native-ui-lib";
+import { fileIcon, folderIcon } from "@/assets/icons/base64-icon";
+import { Breadcrumb } from "@/components/Breadcrumb";
 
 export default function App() {
 
-    const {store} = useServer()
+    const { store } = useServer()
     const state = useSnapshot(store)
     const objStare = useSnapshot(objStore)
     const serverApi = state.server?.url
@@ -57,53 +57,58 @@ export default function App() {
                 hiddenBack={true}
                 customLeft={(
                     <TouchableOpacity onPress={() => router.navigate('/setting')}>
-                        <Ionicons name="settings-outline" size={24} color="black"/>
+                        <Ionicons name="settings-outline" size={24} color="black" />
                     </TouchableOpacity>
                 )}
                 customRight={(
                     <TouchableOpacity onPress={() => router.navigate('/setting')}>
-                        <Ionicons name="settings-outline" size={24} color="black"/>
+                        <Ionicons name="settings-outline" size={24} color="black" />
                     </TouchableOpacity>
                 )}
             />
-            <Breadcrumb/>
-            <ScrollView style={{padding: 20, backgroundColor: '#F2F2F6', flex: 1}}>
+            <Breadcrumb />
+            <ScrollView style={{ padding: 20, backgroundColor: '#F2F2F6', flex: 1 }}>
                 {
-                    res && (res.content) && res.content.length ? (
+                    isLoading ?
+                        <Text>Loading...</Text> :
                         <>
                             {
-                                res.content.map((item, index) => {
-                                    return (
-                                        <ListItem
-                                            onPress={() => {
-                                                const type = item?.is_dir ? Type.Folder : Type.File
-                                                const path = `${objStare.path}${!objStare.path.endsWith('/') && '/' || ''}${item?.name}`
-                                                console.log({type});
-                                                console.log({path});
-                                                const url = `/?path=${path}&type=${type}`
-                                                router.navigate(url)
-                                            }}
-                                            key={index} style={styles.listItem}>
-                                            <View style={styles.listIcon}>
-                                                <Image style={{width: '100%', height: '100%'}}
-                                                       source={{uri: item.is_dir ? folderIcon : fileIcon}}/>
-                                            </View>
+                                res && (res.content) && res.content.length ? (
+                                    <>
+                                        {
+                                            res.content.map((item, index) => {
+                                                return (
+                                                    <ListItem
+                                                        onPress={() => {
+                                                            const type = item?.is_dir ? Type.Folder : Type.File
+                                                            const path = `${objStare.path}${!objStare.path.endsWith('/') && '/' || ''}${item?.name}`
+                                                            console.log({ type });
+                                                            console.log({ path });
+                                                            const url = `/?path=${path}&type=${type}`
+                                                            router.navigate(url)
+                                                        }}
+                                                        key={index} style={styles.listItem}>
+                                                        <View style={styles.listIcon}>
+                                                            <Image style={{ width: '100%', height: '100%' }}
+                                                                source={{ uri: item.is_dir ? folderIcon : fileIcon }} />
+                                                        </View>
 
-                                            <View style={styles.listTitle}>
-                                                <Text style={{fontWeight: 'bold'}}>{item.name}</Text>
-                                            </View>
-                                        </ListItem>
-                                    )
-                                })
+                                                        <View style={styles.listTitle}>
+                                                            <Text style={{ fontWeight: 'bold' }}>{item.name}</Text>
+                                                        </View>
+                                                    </ListItem>
+                                                )
+                                            })
+                                        }
+                                    </>
+                                ) : (
+                                    <View style={{ display: 'flex', alignItems: 'center', paddingTop: '40%' }}>
+                                        <Text style={{ fontWeight: 'bold' }}>空空如也</Text>
+                                    </View>
+                                )
                             }
                         </>
-                    ) : (
-                        <View style={{display: 'flex', alignItems: 'center', paddingTop: '40%'}}>
-                            <Text style={{fontWeight: 'bold'}}>空空如也</Text>
-                        </View>
-                    )
                 }
-
             </ScrollView>
         </>
     )

@@ -7,7 +7,7 @@ export const Message = {
             text1: str,
             visibilityTime: 1000,
             autoHide: true,
-            position: 'bottom',
+            position: 'top',
             props: {
                 icon: '🎉'
             }
@@ -19,7 +19,7 @@ export const Message = {
             text1: str,
             visibilityTime: 1000,
             autoHide: true,
-            position: 'bottom',
+            position: 'top',
             props: {
                 icon: '💬'
             }
@@ -31,7 +31,7 @@ export const Message = {
             text1: str,
             visibilityTime: 1000,
             autoHide: true,
-            position: 'bottom',
+            position: 'top',
             props: {
                 icon: '⚠️'
             }
@@ -42,7 +42,7 @@ export const Message = {
             type: 'message',
             text1: str,
             autoHide: false,
-            position: 'bottom',
+            position: 'top',
             props: {
                 icon: '⏳'
             }
