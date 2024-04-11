@@ -1,4 +1,4 @@
-import { Text, View } from "react-native-ui-lib";
+import { Text, TouchableOpacity, View } from "react-native-ui-lib";
 import { useSnapshot } from "valtio";
 import { Type, objStore } from "@/store/obj";
 import { useEffect, useState } from "react";
@@ -13,6 +13,12 @@ export function Breadcrumb() {
     const objStare = useSnapshot(objStore)
     const [isExit, setIsExit] = useState(false)
 
+    function handleGoPath(path:string) {
+        const index = crumbs.findIndex(item => item === path)
+        const toPath = crumbs.slice(0, index + 1).join('/')
+        router.push(`/?path=${toPath}&type=${Type.Folder}`)
+    }
+
     useEffect(() => {
         const path = objStare.path
         const arr = path.split('/').filter(item => !!item)
@@ -21,20 +27,15 @@ export function Breadcrumb() {
 
     useEffect(() => {
         const onBackPress = () => {
-            console.log('onBackPress', crumbs);
-            console.log('crumbs',crumbs);
             const lastPathArr = crumbs.slice()
             lastPathArr.pop()
-            console.log('lastPathArr',lastPathArr);
-            const lastPath = lastPathArr ? `/${lastPathArr.join('/')}` : '/' 
-            console.log('lastPath=>', lastPath);
+            const lastPath = lastPathArr ? `/${lastPathArr.join('/')}` : '/'
             const url = `/?path=${lastPath}&type=${Type.Folder}`
-            console.log('url=>', url);
-            if(crumbs.length === 0) {
-                if(isExit) {
+            if (crumbs.length === 0) {
+                if (isExit) {
                     BackHandler.exitApp()
                 }
-                if(!isExit) {
+                if (!isExit) {
                     setIsExit(true)
                     Message.info('再按一次退出应用')
                     setTimeout(() => {
@@ -50,20 +51,25 @@ export function Breadcrumb() {
         return () => {
             BackHandler.removeEventListener('hardwareBackPress', onBackPress);
         };
-    }, [objStare,crumbs, isExit])
+    }, [objStare, crumbs, isExit])
 
     return (
         <>
             <View style={styles.container}>
-                <View style={styles.crumbItem}>
-                    <Text>主页</Text>
-                </View>
+                <TouchableOpacity onPress={() => handleGoPath('/')}>
+                    <View style={styles.crumbItem}>
+                        <Text>主页</Text>
+                    </View>
+                </TouchableOpacity>
+
                 {
                     crumbs?.map(crumb => {
                         return (
-                            <View style={styles.crumbItem}>
-                                <Text key={crumb}>{crumb}</Text>
-                            </View>
+                            <TouchableOpacity onPress={() => handleGoPath(crumb)}>
+                                <View style={styles.crumbItem}>
+                                    <Text key={crumb}>{crumb}</Text>
+                                </View>
+                            </TouchableOpacity>
                         )
                     })
                 }

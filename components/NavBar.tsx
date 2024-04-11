@@ -18,18 +18,19 @@ interface IProps {
     hiddenTitle?: boolean
     customLeft?: ReactElement
     customRight?: ReactElement
+    customLeftFun?: () => void
 }
 
 export default function NavBar(props: IProps) {
     const {
         statusBarColor, title, titleStyle, style,
-        hiddenBack, hiddenTitle, customLeft, customRight
+        hiddenBack, hiddenTitle, customLeft, customRight, customLeftFun
     } = props
     return (
         <View style={{ ...styles.nav, paddingTop: barHeight }}>
             <StatusBar backgroundColor={statusBarColor} />
             <View style={styles.fun}>
-                {!!customLeft ? customLeft : (!hiddenBack && <TouchableOpacity onPress={() => router.back()}>
+                {!!customLeft ? customLeft : (!hiddenBack && <TouchableOpacity onPress={() => customLeftFun && customLeftFun() || router.back()}>
                     <AntDesign  size={20} name="arrowleft" style={styles.icon} />
                 </TouchableOpacity>)}
             </View>

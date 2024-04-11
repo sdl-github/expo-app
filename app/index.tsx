@@ -9,7 +9,7 @@ import useSWR from "swr";
 import request from "@/lib/request";
 import { FsListResp } from "@/lib/types/resp";
 import { useSnapshot } from 'valtio'
-import { Colors, Image, ListItem } from "react-native-ui-lib";
+import { Colors, Image, ListItem, ProgressBar, SkeletonView } from "react-native-ui-lib";
 import { fileIcon, folderIcon } from "@/assets/icons/base64-icon";
 import { Breadcrumb } from "@/components/Breadcrumb";
 
@@ -43,7 +43,6 @@ export default function App() {
     const res = (data as FsListResp) || null
 
     useEffect(() => {
-        console.log('params==>', params)
         const path = (params.path as string) || '/'
         const type = (params.type || Type.Folder) as Type
         objStore.path = path
@@ -53,13 +52,22 @@ export default function App() {
     return (
         <>
             <NavBar
-                title={'文件管理'}
-                hiddenBack={true}
-                customLeft={(
+                title={params.path as string || '文件管理'}
+                hiddenBack={false}
+                customLeft={(!params.path || params.path === '/') ? (
                     <TouchableOpacity onPress={() => router.navigate('/setting')}>
                         <Ionicons name="settings-outline" size={24} color="black" />
                     </TouchableOpacity>
-                )}
+                ) : undefined}
+                customLeftFun={params.path !== '/' && (() => {
+                    const path = objStare.path
+                    const arr = path.split('/').filter(item => !!item)
+                    const lastPathArr = arr.slice()
+                    lastPathArr.pop()
+                    const lastPath = lastPathArr ? `/${lastPathArr.join('/')}` : '/'
+                    const url = `/?path=${lastPath}&type=${Type.Folder}`
+                    router.navigate(url)
+                }) || undefined}
                 customRight={(
                     <TouchableOpacity onPress={() => router.navigate('/setting')}>
                         <Ionicons name="settings-outline" size={24} color="black" />
@@ -70,7 +78,9 @@ export default function App() {
             <ScrollView style={{ padding: 20, backgroundColor: '#F2F2F6', flex: 1 }}>
                 {
                     isLoading ?
-                        <Text>Loading...</Text> :
+                        <>
+                            loading...
+                        </> :
                         <>
                             {
                                 res && (res.content) && res.content.length ? (

@@ -3872,6 +3872,11 @@ expo-keep-awake@~12.8.2:
   resolved "https://mirrors.cloud.tencent.com/npm/expo-keep-awake/-/expo-keep-awake-12.8.2.tgz#6cfdf8ad02b5fa130f99d4a1eb98e459d5b4332e"
   integrity sha512-uiQdGbSX24Pt8nGbnmBtrKq6xL/Tm3+DuDRGBk/3ZE/HlizzNosGRIufIMJ/4B4FRw4dw8KU81h2RLuTjbay6g==
 
+expo-linear-gradient@~12.7.2:
+  version "12.7.2"
+  resolved "https://mirrors.cloud.tencent.com/npm/expo-linear-gradient/-/expo-linear-gradient-12.7.2.tgz#2ff9593eae8448ac5630be1a36ce6133c4a6f074"
+  integrity sha512-Wwb2EF18ywgrlTodcXJ6Yt/UEcKitRMdXPNyP/IokmeKh4emoq9DxZJpZdkXm3HUTLlbRpi6/t32jrFVqXB9AQ==
+
 expo-linking@~6.2.2:
   version "6.2.2"
   resolved "https://mirrors.cloud.tencent.com/npm/expo-linking/-/expo-linking-6.2.2.tgz#b7e148068ae49fd9ad814428c16fdf7a236e8aca"
@@ -6457,6 +6462,11 @@ react-native-gesture-handler@^2.15.0:
     lodash "^4.17.21"
     prop-types "^15.7.2"
 
+react-native-linear-gradient@^2.8.3:
+  version "2.8.3"
+  resolved "https://mirrors.cloud.tencent.com/npm/react-native-linear-gradient/-/react-native-linear-gradient-2.8.3.tgz#9a116649f86d74747304ee13db325e20b21e564f"
+  integrity sha512-KflAXZcEg54PXkLyflaSZQ3PJp4uC4whM7nT/Uot9m0e/qxFV3p6uor1983D1YOBJbJN7rrWdqIjq0T42jOJyA==
+
 react-native-reanimated@^3.6.2:
   version "3.6.2"
   resolved "https://mirrors.cloud.tencent.com/npm/react-native-reanimated/-/react-native-reanimated-3.6.2.tgz#8a48c37251cbd3b665a659444fa9778f5b510356"
@@ -6489,6 +6499,11 @@ react-native-screens@~3.29.0:
   dependencies:
     react-freeze "^1.0.0"
     warn-once "^0.1.0"
+
+react-native-shimmer-placeholder@^2.0.9:
+  version "2.0.9"
+  resolved "https://mirrors.cloud.tencent.com/npm/react-native-shimmer-placeholder/-/react-native-shimmer-placeholder-2.0.9.tgz#0096932289bd9ec5747cd4f1c9d15f91ba02157a"
+  integrity sha512-s2pfAAO6uaybREYM2KcaxP3c2XlZvLfHfzmhMlGEoOhSKaoM92KpA1Hx0BeC75yilkliJuowqO/hFzvLB0h7hg==
 
 react-native-toast-message@^2.2.0:
   version "2.2.0"
