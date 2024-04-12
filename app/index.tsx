@@ -9,17 +9,19 @@ import useSWR from "swr";
 import request from "@/lib/request";
 import { FsListResp } from "@/lib/types/resp";
 import { useSnapshot } from 'valtio'
-import { Colors, Image, ListItem, ProgressBar, SkeletonView } from "react-native-ui-lib";
+import { Colors, Image, ListItem, SkeletonView } from "react-native-ui-lib";
 import { fileIcon, folderIcon } from "@/assets/icons/base64-icon";
 import { Breadcrumb } from "@/components/Breadcrumb";
+import { usePath } from '@/hooks/use-path';
+import FilePreview from '@/components/FilePreview'
 
 export default function App() {
 
     const { store } = useServer()
     const state = useSnapshot(store)
-    const objStare = useSnapshot(objStore)
+    const objState = useSnapshot(objStore)
+    const { backToLast, goToPath } = usePath()
     const serverApi = state.server?.url
-
     const params = useGlobalSearchParams();
     const [searchParams] = useState({
         path: '/',
@@ -42,17 +44,10 @@ export default function App() {
 
     const res = (data as FsListResp) || null
 
-    useEffect(() => {
-        const path = (params.path as string) || '/'
-        const type = (params.type || Type.Folder) as Type
-        objStore.path = path
-        objStore.type = type
-    }, [store.server, params])
-
     return (
         <>
             <NavBar
-                title={params.path as string || '文件管理'}
+                title='文件管理'
                 hiddenBack={false}
                 customLeft={(!params.path || params.path === '/') ? (
                     <TouchableOpacity onPress={() => router.navigate('/setting')}>
@@ -60,66 +55,54 @@ export default function App() {
                     </TouchableOpacity>
                 ) : undefined}
                 customLeftFun={params.path !== '/' && (() => {
-                    const path = objStare.path
-                    const arr = path.split('/').filter(item => !!item)
-                    const lastPathArr = arr.slice()
-                    lastPathArr.pop()
-                    const lastPath = lastPathArr ? `/${lastPathArr.join('/')}` : '/'
-                    const url = `/?path=${lastPath}&type=${Type.Folder}`
-                    router.navigate(url)
+                    backToLast()
                 }) || undefined}
-                customRight={(
-                    <TouchableOpacity onPress={() => router.navigate('/setting')}>
-                        <Ionicons name="settings-outline" size={24} color="black" />
-                    </TouchableOpacity>
-                )}
             />
             <Breadcrumb />
-            <ScrollView style={{ padding: 20, backgroundColor: '#F2F2F6', flex: 1 }}>
-                {
-                    isLoading ?
-                        <>
-                            loading...
-                        </> :
-                        <>
-                            {
-                                res && (res.content) && res.content.length ? (
-                                    <>
-                                        {
-                                            res.content.map((item, index) => {
-                                                return (
-                                                    <ListItem
-                                                        onPress={() => {
-                                                            const type = item?.is_dir ? Type.Folder : Type.File
-                                                            const path = `${objStare.path}${!objStare.path.endsWith('/') && '/' || ''}${item?.name}`
-                                                            console.log({ type });
-                                                            console.log({ path });
-                                                            const url = `/?path=${path}&type=${type}`
-                                                            router.navigate(url)
-                                                        }}
-                                                        key={index} style={styles.listItem}>
-                                                        <View style={styles.listIcon}>
-                                                            <Image style={{ width: '100%', height: '100%' }}
-                                                                source={{ uri: item.is_dir ? folderIcon : fileIcon }} />
-                                                        </View>
-
-                                                        <View style={styles.listTitle}>
-                                                            <Text style={{ fontWeight: 'bold' }}>{item.name}</Text>
-                                                        </View>
-                                                    </ListItem>
-                                                )
-                                            })
-                                        }
-                                    </>
-                                ) : (
-                                    <View style={{ display: 'flex', alignItems: 'center', paddingTop: '40%' }}>
-                                        <Text style={{ fontWeight: 'bold' }}>空空如也</Text>
-                                    </View>
-                                )
-                            }
-                        </>
-                }
-            </ScrollView>
+            {
+                isLoading ?
+                    <>
+                        <Text>loading</Text>
+                    </> :
+                    <>
+                        {
+                            objState.type === Type.Folder && <>
+                                <ScrollView style={{ padding: 20, backgroundColor: '#F2F2F6', flex: 1 }}>
+                                    {
+                                        res && (res.content) && res.content.length ? (
+                                            <>
+                                                {
+                                                    res.content.map((item, index) => {
+                                                        return (
+                                                            <ListItem
+                                                                onPress={() => goToPath(item)}
+                                                                key={index} style={styles.listItem}>
+                                                                <View style={styles.listIcon}>
+                                                                    <Image style={{ width: '100%', height: '100%' }}
+                                                                        source={{ uri: item.is_dir ? folderIcon : fileIcon }} />
+                                                                </View>
+                                                                <View style={styles.listTitle}>
+                                                                    <Text style={{ fontWeight: 'bold' }}>{item.name}</Text>
+                                                                </View>
+                                                            </ListItem>
+                                                        )
+                                                    })
+                                                }
+                                            </>
+                                        ) : (
+                                            <View style={{ display: 'flex', alignItems: 'center', paddingTop: '40%' }}>
+                                                <Text style={{ fontWeight: 'bold' }}>空空如也</Text>
+                                            </View>
+                                        )
+                                    }
+                                </ScrollView>
+                            </>
+                        }
+                        {
+                            objState.type === Type.File && <FilePreview />
+                        }
+                    </>
+            }
         </>
     )
 }

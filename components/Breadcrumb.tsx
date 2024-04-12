@@ -2,7 +2,7 @@ import { Text, TouchableOpacity, View } from "react-native-ui-lib";
 import { useSnapshot } from "valtio";
 import { Type, objStore } from "@/store/obj";
 import { useEffect, useState } from "react";
-import { StyleSheet } from "react-native";
+import { ScrollView, StyleSheet } from "react-native";
 import { BackHandler } from 'react-native';
 import { router } from "expo-router";
 import { Message } from "@/lib/message";
@@ -13,7 +13,7 @@ export function Breadcrumb() {
     const objStare = useSnapshot(objStore)
     const [isExit, setIsExit] = useState(false)
 
-    function handleGoPath(path:string) {
+    function handleGoPath(path: string) {
         const index = crumbs.findIndex(item => item === path)
         const toPath = crumbs.slice(0, index + 1).join('/')
         router.push(`/?path=${toPath}&type=${Type.Folder}`)
@@ -61,18 +61,19 @@ export function Breadcrumb() {
                         <Text>主页</Text>
                     </View>
                 </TouchableOpacity>
-
-                {
-                    crumbs?.map(crumb => {
-                        return (
-                            <TouchableOpacity onPress={() => handleGoPath(crumb)}>
-                                <View style={styles.crumbItem}>
-                                    <Text key={crumb}>{crumb}</Text>
-                                </View>
-                            </TouchableOpacity>
-                        )
-                    })
-                }
+                <ScrollView horizontal={true}>
+                    {
+                        crumbs?.map(crumb => {
+                            return (
+                                <TouchableOpacity key={crumb} onPress={() => handleGoPath(crumb)}>
+                                    <View style={styles.crumbItem}>
+                                        <Text key={crumb}>{crumb}</Text>
+                                    </View>
+                                </TouchableOpacity>
+                            )
+                        })
+                    }
+                </ScrollView>
             </View>
         </>
     )

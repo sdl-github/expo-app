@@ -1,11 +1,29 @@
 import { Button, View } from "react-native-ui-lib";
-import { Video, ResizeMode } from 'expo-av';
+import { Video, ResizeMode, VideoFullscreenUpdate, VideoFullscreenUpdateEvent } from 'expo-av';
 import React, { useRef } from "react";
-import { StyleSheet } from "react-native";
+import { Platform, StyleSheet } from "react-native";
 import VideoPlayer from 'expo-video-player'
+import * as ScreenOrientation from "expo-screen-orientation";
 
-export default function Player() {
+interface IProps {
+    url: string
+}
+export default function Player(props: IProps) {
+    const { url } = props
     const video = React.useRef(null);
+    // For Android, we need to unlock the screen to make the fullscreen feature work
+    const onFullscreenUpdate = async ({ fullscreenUpdate }: VideoFullscreenUpdateEvent) => {
+        if (Platform.OS === "android") {
+            if (fullscreenUpdate === VideoFullscreenUpdate.PLAYER_DID_PRESENT) {
+                await ScreenOrientation.unlockAsync();
+            } else if (fullscreenUpdate === VideoFullscreenUpdate.PLAYER_WILL_DISMISS) {
+                // lock the screen in Portrait orientation
+                await ScreenOrientation.lockAsync(
+                    ScreenOrientation.OrientationLock.PORTRAIT
+                );
+            }
+        }
+    };
 
     return (
         <View style={styles.container}>
@@ -14,16 +32,14 @@ export default function Player() {
                     height: 200,
                 }}
                 slider={{
-                    
-                }}
-                fullscreen={{
-                    enterFullscreen: () => {}
+
                 }}
                 videoProps={{
+                    onFullscreenUpdate: onFullscreenUpdate,
                     shouldPlay: true,
                     resizeMode: ResizeMode.CONTAIN,
                     source: {
-                        uri: 'https://d23dyxeqlo5psv.cloudfront.net/big_buck_bunny.mp4',
+                        uri: url,
                     },
                 }}
             />
