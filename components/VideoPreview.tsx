@@ -6,7 +6,7 @@ import { useSnapshot } from "valtio"
 import useSWRImmutable from 'swr/immutable'
 import { LiveTranscodingTaskList, PreviewData } from "@/lib/types"
 import request from "@/lib/request"
-import Video from "./Video"
+import Video from "./VideoPlayer"
 
 export function VideoPreview() {
     const { store } = useServer()

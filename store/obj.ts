@@ -1,4 +1,4 @@
-import {Obj} from "@/lib/types/obj";
+import { Obj } from "@/lib/types/obj";
 import { proxy, useSnapshot } from 'valtio'
 
 export enum Type {

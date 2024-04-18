@@ -14,11 +14,13 @@ import { fileIcon, folderIcon } from "@/assets/icons/base64-icon";
 import { Breadcrumb } from "@/components/Breadcrumb";
 import { usePath } from '@/hooks/use-path';
 import FilePreview from '@/components/FilePreview'
+import { videoPlayerStore } from '@/store/video-player';
 
 export default function App() {
 
     const { store } = useServer()
     const state = useSnapshot(store)
+    const videoPlayerState = useSnapshot(videoPlayerStore)
     const objState = useSnapshot(objStore)
     const { backToLast, goToPath } = usePath()
     const serverApi = state.server?.url
@@ -30,6 +32,7 @@ export default function App() {
         per_page: 0,
         refresh: false
     })
+
     const {
         isLoading,
         data,
@@ -46,19 +49,25 @@ export default function App() {
 
     return (
         <>
-            <NavBar
-                title='文件管理'
-                hiddenBack={false}
-                customLeft={(!params.path || params.path === '/') ? (
-                    <TouchableOpacity onPress={() => router.navigate('/setting')}>
-                        <Ionicons name="settings-outline" size={24} color="black" />
-                    </TouchableOpacity>
-                ) : undefined}
-                customLeftFun={params.path !== '/' && (() => {
-                    backToLast()
-                }) || undefined}
-            />
-            <Breadcrumb />
+            {
+                videoPlayerState.isFullscreen ? null :
+                    <>
+                        <NavBar
+                            title='文件管理'
+                            hiddenBack={false}
+                            customLeft={(!params.path || params.path === '/') ? (
+                                <TouchableOpacity onPress={() => router.navigate('/setting')}>
+                                    <Ionicons name="settings-outline" size={24} color="black" />
+                                </TouchableOpacity>
+                            ) : undefined}
+                            customLeftFun={params.path !== '/' && (() => {
+                                backToLast()
+                            }) || undefined}
+                        />
+                        <Breadcrumb />
+                    </>
+            }
+
             {
                 isLoading ?
                     <>
